@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Fluffy Cuddles — Jellycat Việt Nam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#FEFAF3;--brown:#3D2410;--brown-mid:#7B4F2E;--brown-light:#B8895A;
+  --tan:#EAD8BB;--tan-light:#F5ECD8;--red:#B83020;--card:#FFFDF8;--border:#E0C99A;
+}
+html,body{background:var(--cream)}
+body{font-family:'Nunito',sans-serif;color:var(--brown);min-height:100vh;max-width:480px;margin:0 auto;position:relative}
+
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
+.loading-bear{font-size:52px;animation:bob .9s ease-in-out infinite alternate}
+.loading-text{font-size:13px;font-weight:700;color:var(--brown-light);letter-spacing:.5px}
+@keyframes bob{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-12px) rotate(5deg)}}
+
+/* HEADER */
+header{background:var(--cream);border-bottom:1.5px solid var(--tan);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-icon{width:34px;height:34px;background:var(--brown);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-name{font-size:14px;font-weight:900;color:var(--brown);letter-spacing:-.3px;line-height:1.1}
+.logo-sub{font-size:8px;font-weight:700;color:var(--brown-light);letter-spacing:2px;text-transform:uppercase}
+.fb-btn{background:var(--brown);color:#fff;border:none;border-radius:20px;padding:7px 13px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap}
+.fb-btn:hover{background:var(--red)}
+
+/* HERO */
+.hero{padding:24px 20px 18px;text-align:center;background:linear-gradient(180deg,#FDF3E3 0%,var(--cream) 100%)}
+.hero-dots{display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:10px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.hero-dot.lg{width:8px;height:8px}
+.hero h1{font-size:24px;font-weight:900;color:var(--brown);line-height:1.15;margin-bottom:6px;letter-spacing:-.5px}
+.hero h1 em{font-style:italic;font-family:'Playfair Display',serif;font-weight:400;color:var(--brown-mid)}
+.hero p{font-size:12px;color:var(--brown-mid);line-height:1.6;max-width:280px;margin:0 auto}
+
+/* SEARCH */
+.search-wrap{padding:10px 14px 0;position:relative}
+.search-input{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:9px 14px 9px 36px;font-size:13px;font-family:'Nunito',sans-serif;color:var(--brown);outline:none}
+.search-input:focus{border-color:var(--brown-light)}
+.search-ico{position:absolute;left:26px;top:50%;transform:translateY(-30%);font-size:14px;pointer-events:none}
+
+/* FILTERS */
+.filters{background:var(--cream);position:sticky;top:57px;z-index:40;border-bottom:1px solid var(--tan);padding-bottom:4px}
+.filter-lbl{font-size:9px;font-weight:800;color:var(--brown-light);letter-spacing:2px;text-transform:uppercase;padding:6px 16px 2px;display:block}
+.chip-row{display:flex;gap:5px;padding:0 14px 6px;overflow-x:auto;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;background:transparent;border:1.5px solid var(--border);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--brown-mid);cursor:pointer;white-space:nowrap;transition:all .12s;user-select:none}
+.chip.on{background:var(--brown);border-color:var(--brown);color:#fff}
+.chip:active{transform:scale(.95)}
+
+/* RESULTS */
+.results-bar{padding:8px 16px 4px;display:flex;justify-content:space-between;align-items:center}
+.results-count{font-size:11px;font-weight:700;color:var(--brown-light)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 11px 80px}
+
+/* CARD */
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .1s}
+.card:active{transform:scale(.97)}
+.card-img{aspect-ratio:1;background:var(--tan-light);position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .4s}
+.card-img img.show{opacity:1}
+.card-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:42px;position:absolute;inset:0}
+.size-tag{position:absolute;top:6px;left:6px;background:rgba(255,253,248,.93);border:1px solid var(--border);border-radius:8px;padding:2px 7px;font-size:9px;font-weight:800;color:var(--brown-mid)}
+.card-body{padding:8px 10px 10px;flex:1;display:flex;flex-direction:column;gap:3px}
+.card-cat{font-size:9px;font-weight:800;color:var(--brown-light);letter-spacing:1px;text-transform:uppercase}
+.card-name{font-size:11px;font-weight:700;color:var(--brown);line-height:1.3;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.price-tag{align-self:flex-start;background:var(--tan-light);border:1px solid var(--border);border-radius:8px;padding:2px 7px;font-size:10px;font-weight:800;color:var(--brown-mid);margin-top:2px}
+.ask-btn{margin-top:6px;width:100%;background:var(--brown);color:#fff;border:none;border-radius:10px;padding:8px 4px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:background .12s;letter-spacing:.2px}
+.ask-btn:active{background:var(--red)}
+
+/* EMPTY */
+.empty{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--brown-light);font-size:13px;font-weight:700}
+
+
+/* FOOTER */
+footer{background:var(--brown);color:var(--tan);text-align:center;padding:20px 16px;font-size:12px;line-height:1.9}
+footer a{color:#F5ECD8;font-weight:800;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loading-bear">🐻</div>
+  <div class="loading-text">Đang tải sản phẩm...</div>
+</div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🐻</div>
+    <div>
+      <div class="logo-name">Fluffy Cuddles</div>
+      <div class="logo-sub">soft care service</div>
+    </div>
+  </div>
+  <a class="fb-btn" href="https://www.facebook.com/thefluffycuddles/" target="_blank">Nhắn tin →</a>
+</header>
+
+<section class="hero">
+  <div class="hero-dots">
+    <div class="hero-dot"></div><div class="hero-dot lg"></div><div class="hero-dot"></div>
+  </div>
+  <h1>Jellycat <em>chính hãng</em><br>tại Việt Nam</h1>
+  <p>Hàng có sẵn · ship ngay · mỗi bé được chăm sóc kỹ trước khi đến tay bạn 🐾</p>
+</section>
+
+<div class="search-wrap">
+  <span class="search-ico">🔍</span>
+  <input class="search-input" type="text" placeholder="Tìm tên sản phẩm..." id="search">
+</div>
+
+<div class="filters">
+  <span class="filter-lbl">Loại</span>
+  <div class="chip-row" id="tag-chips">
+    <button class="chip on" data-val="all">Tất cả</button>
+    <button class="chip" data-val="Bunnies">🐰 Bunnies</button>
+    <button class="chip" data-val="Bear">🐻 Bears</button>
+    <button class="chip" data-val="Dragon">🐲 Dragons</button>
+    <button class="chip" data-val="Amuseables">🍩 Amuseables</button>
+    <button class="chip" data-val="Smudge">🐼 Smudge</button>
+    <button class="chip" data-val="Fuddlewuddle">🦁 Fuddlewuddle</button>
+    <button class="chip" data-val="Puppy">🐶 Puppy</button>
+    <button class="chip" data-val="Other Animals">🦆 Others</button>
+    <button class="chip" data-val="Musical Pull">🎵 Musical</button>
+    <button class="chip" data-val="Bag Charm">✨ Charm</button>
+  </div>
+  <span class="filter-lbl">Size</span>
+  <div class="chip-row" id="size-chips">
+    <button class="chip on" data-val="all">Tất cả</button>
+    <button class="chip" data-val="Small">Small</button>
+    <button class="chip" data-val="Medium">Medium</button>
+    <button class="chip" data-val="Large">Large</button>
+    <button class="chip" data-val="Huge">Huge</button>
+    <button class="chip" data-val="Really Big">Really Big</button>
+  </div>
+  <span class="filter-lbl">Giá</span>
+  <div class="chip-row" id="price-chips">
+    <button class="chip on" data-val="all">Tất cả</button>
+    <button class="chip" data-val="Dưới 1 triệu">Dưới 1tr</button>
+    <button class="chip" data-val="1 – 2 triệu">1–2 triệu</button>
+    <button class="chip" data-val="2 – 3 triệu">2–3 triệu</button>
+    <button class="chip" data-val="3 – 4 triệu">3–4 triệu</button>
+    <button class="chip" data-val="4 – 5 triệu">4–5 triệu</button>
+    <button class="chip" data-val="Trên 5 triệu">5tr+</button>
+  </div>
+</div>
+
+<div class="results-bar">
+  <span class="results-count" id="count">Đang tải...</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  <strong>The Fluffy Cuddles</strong> · Soft Care Service<br>
+  <a href="https://www.facebook.com/thefluffycuddles/" target="_blank">Facebook / Messenger</a>
+  &nbsp;·&nbsp; Jellycat chính hãng tại Việt Nam
+</footer>
+
+
+<script>
+const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSMJSxl6mo7K9MSdVA5OmxVy1HyV4UGP8CVzoOVlGEsCLEzTKimv4EtWspzPyxcf2kcknaQ8eTTtrWQ/pub?gid=1138333654&single=true&output=csv&t=' + Date.now();
+const GITHUB_RAW = 'https://raw.githubusercontent.com/nhlong2990-rgb/fluffy-cuddles/main/';
+const FB = 'https://www.facebook.com/thefluffycuddles/';
+const EMOJI = {Bunnies:'🐰',Bear:'🐻',Dragon:'🐲','Other Animals':'🦆',Amuseables:'🍩',Smudge:'🐼',Fuddlewuddle:'🦁',Puppy:'🐶','Musical Pull':'🎵','Bag Charm':'✨',Toy:'🎁'};
+
+let ALL = [], filtered = [];
+let fTag='all', fSize='all', fPrice='all', fSearch='';
+
+// Parse CSV — handle quoted fields
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = splitCSVLine(lines[0]);
+  const tagIdx=0,prodIdx=1,sizeIdx=2,priceNumIdx=3,priceIdx=4;
+  const seen = new Set();
+  const rows = [];
+  for(let i=1;i<lines.length;i++){
+    const c = splitCSVLine(lines[i]);
+    const tag=(c[tagIdx]||'').trim();
+    const prod=(c[prodIdx]||'').trim();
+    const size=(c[sizeIdx]||'').trim();
+    const price=(c[priceIdx]||'').trim();
+
+    if(!prod||prod==='Product') continue;
+    // Dedup by product+size
+    const key=(prod+'|'+size).toLowerCase();
+    if(seen.has(key)) continue;
+    seen.add(key);
+    rows.push({tag,prod,size,price});
+  }
+  return rows;
+}
+
+function splitCSVLine(line){
+  const result=[];
+  let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    if(line[i]==='"'){inQ=!inQ;}
+    else if(line[i]===','&&!inQ){result.push(cur);cur='';}
+    else cur+=line[i];
+  }
+  result.push(cur);
+  return result;
+}
+
+function getFiltered(){
+  return ALL.filter(p=>{
+    if(fTag!=='all'&&p.tag!==fTag) return false;
+    if(fSize!=='all'&&p.size!==fSize) return false;
+    if(fPrice!=='all'&&p.price!==fPrice) return false;
+    if(fSearch&&!p.prod.toLowerCase().includes(fSearch)) return false;
+    return true;
+  });
+}
+
+function getGithubImg(prod, size, ext) {
+  const sizeLower = (size||'').toLowerCase();
+  // Try both with size and without size
+  const nameWithSize = sizeLower ? `${prod} ${sizeLower}.${ext}` : `${prod}.${ext}`;
+  return GITHUB_RAW + encodeURIComponent(nameWithSize);
+}
+
+function tryImgSrcs(img, ph, prod, size) {
+  const sizeLower = (size||'').toLowerCase();
+  const candidates = [
+    `${prod}.webp`,
+    `${prod}.jpg`,
+    sizeLower ? `${prod} ${sizeLower}.webp` : null,
+    sizeLower ? `${prod} ${sizeLower}.jpg` : null,
+  ].filter(Boolean);
+  let idx = 0;
+  function tryNext() {
+    if(idx >= candidates.length) {
+      if(img) img.style.display='none';
+      if(ph) ph.style.display='flex';
+      return;
+    }
+    const src = GITHUB_RAW + encodeURIComponent(candidates[idx++]);
+    const t = new Image();
+    t.onload = () => { if(img){img.src=src;img.classList.add('show');} if(ph)ph.style.display='none'; };
+    t.onerror = tryNext;
+    t.src = src;
+  }
+  tryNext();
+}
+
+function render(){
+  filtered = getFiltered();
+  document.getElementById('count').textContent = filtered.length+' sản phẩm';
+  const grid = document.getElementById('grid');
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty">Không tìm thấy sản phẩm 🐾</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map((p,i)=>{
+    const em = EMOJI[p.tag]||'🧸';
+    return `<div class="card">
+      <div class="card-img">
+        <div class="card-ph" id="ph-${i}">${em}</div>
+        <img id="ci-${i}" src="" alt="${p.prod}" style="display:none">
+        <span class="size-tag">${p.size||'–'}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-cat">${p.tag}</div>
+        <div class="card-name">${p.prod}</div>
+        <span class="price-tag">${p.price}</span>
+        <button class="ask-btn" onclick="event.stopPropagation();ask('${p.prod.replace(/'/g,"\\'")}')">Hỏi mua →</button>
+      </div>
+    </div>`;
+  }).join('');
+  // Load images after render
+  filtered.forEach((p,i) => {
+    const img = document.getElementById('ci-'+i);
+    const ph = document.getElementById('ph-'+i);
+    if(img && ph) tryImgSrcs(img, ph, p.prod, p.size);
+  });
+}
+
+function imgLoaded(imgId, phId){
+  const img=document.getElementById(imgId);
+  const ph=document.getElementById(phId);
+  if(img){img.classList.add('show')}
+  if(ph){ph.style.display='none'}
+}
+
+
+function ask(name){
+  window.open(FB,'_blank');
+}
+
+// Filter wiring
+function wireChips(rowId, setter){
+  document.getElementById(rowId).addEventListener('click',e=>{
+    const c=e.target.closest('.chip');if(!c)return;
+    setter(c.dataset.val);
+    document.querySelectorAll('#'+rowId+' .chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    render();
+  });
+}
+wireChips('tag-chips', v=>fTag=v);
+wireChips('size-chips', v=>fSize=v);
+wireChips('price-chips', v=>fPrice=v);
+
+document.getElementById('search').addEventListener('input',e=>{
+  fSearch=e.target.value.toLowerCase().trim();
+  render();
+});
+
+// Load CSV
+function loadData(){
+  ALL = [{"tag": "Bunnies", "prod": "Fawn Flufflet Bunny", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Oat Flufflet Bunny", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Wheat Flufflet Bunny", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blossom Blush Bunny Cherry", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Bunny Gold Medal Ski Outfit", "size": "Small", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Junior", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Junior Pilot", "size": "Small", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Boiled Egg Bride", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Heart Boiled Egg", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Diamond Ring", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Boiled Egg Graduation", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Pair of Olives", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Peanut", "size": "Small", "price": "Dưới 1 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Peanut Space Rodeo Outfit", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Peanut Star Student Outfit", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Arlette Heart Macaron", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Colette Heart Macaron", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Doughnut", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Jerboa", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Pig", "size": "Small", "price": "Dưới 1 triệu"}, {"tag": "Other Animals", "prod": "Little Pup", "size": "Small", "price": "Dưới 1 triệu"}, {"tag": "Other Animals", "prod": "Little Monkey", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Bear", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Penguin", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Horse", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Fox", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Yummy Duckling", "size": "Small", "price": "Dưới 1 triệu"}, {"tag": "Other Animals", "prod": "Amuseables Coral", "size": "Small", "price": "Dưới 1 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Bunny Egg", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Boiled Egg Groom", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Boiled Egg Geek", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Reindeer", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Little Chick", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Little Snowman", "size": "Small", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Lazulia", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Thistlepop Blossom Luxe Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Hoppleston Luxe Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Hopscone Luxe Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Zodihop", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Azure", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Curly", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Juniper", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bláthnaid Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Nimbus", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Willow", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Rosa", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Luxe Bunny Luna", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Bunny Scarlett", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Patchwork Brown Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blossom Tulip Pink Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Blossom Sage Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Blossom Dusky Blue Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Blossom Beige Bunny 'Petal'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blossom Creme Bunny 'Berry'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blossom Silver Bunny 'Bloom'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blossom Blush Bunny 'Cherry'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Twinkle Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Bunny with Graduation Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Cream Bunny with Rose", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Cream Bunny with Star", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Cream Bunny with Plant", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Bunny Beige Backpack", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Beige Bunny 'Birthday'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Beige Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Pink Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Blue Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Cream Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Blush Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Tulip Pink Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Viola Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Silver Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Lilac Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Bashful Oatmeal Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Lavender Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Moss Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Sorrel Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Golden Bunny", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Inky Bunny", "size": "Medium", "price": "Trên 5 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Amberley Bunny", "size": "Medium", "price": "Trên 5 triệu"}, {"tag": "Bear", "prod": "Oatus Bear with Icecream", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Leola Bear with Strawberry Cake - Beijing", "size": "Medium", "price": "3 – 4 triệu"}, {"tag": "Bear", "prod": "Leola Bear", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Cupcake", "size": "Medium", "price": "3 – 4 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Sun Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear All-in-one Outfit", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Bathrobe", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Bat", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Winter Pyjamas", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Eggplant Bear", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear 'Spider'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear 'Bumble Bee'", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Daffodil Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Smudge", "prod": "Smudge Fox", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Panda", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Elephant", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Pig", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Rabbit", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Apricot Rabbit", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Duckling", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Dorit Duckling", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Puppy", "prod": "Bashful Black & Cream Puppy", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Puppy", "prod": "Tumblie Sheep Dog", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Puppy", "prod": "Munro Scottie Dog", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Puppy", "prod": "Munro Scottie Dog Space Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Puppy", "prod": "Bashful Luxe Puppy Orlando", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Koala with Message", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Jerboa", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Sacha Snow Tiger", "size": "Little", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Luxe Elephant Thuddeus", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Zumblebi Alien", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Other Animals", "prod": "Bashful Dino", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Giraffe", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Monkey", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Brooke Otter", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Carissa Persian Cat", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Fox Cub", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Fuddlewuddle", "prod": "Fuddlewuddle Lion", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Fuddlewuddle", "prod": "Fuddlewuddle Elephant", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Peach", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Lightbulb", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Rainbow Birthday Cake", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Birthday Cake", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Fran Pancakes", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Cheri Cake", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Carrot Cake", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Glacy Chocolate Cake", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Sports Cariss Curling Stone", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Bouquet of Flowers", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Rose Bouquet", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Hydrangea", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Jellysaucer", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Sports Football", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Zyllan Alien", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Puddlesea Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Bunnies", "prod": "Blushkin Blossom Luxe Bunny", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Bashful Unicorn", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Bear", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Smudge", "prod": "Smudge Monkey", "size": "Medium", "price": "1 – 2 triệu"}, {"tag": "Other Animals", "prod": "Roarwell Sea Lion", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear Seafarer Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Other Animals", "prod": "Larry Lobster Sailor Outfit", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Other Animals", "prod": "Keli Pelican", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Other Animals", "prod": "Maffles Manatee", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Sun 'Roller Skates'", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Amuseables", "prod": "Amuseables Football", "size": "Medium", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Blossom Tulip Pink Bunny", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Bunnies", "prod": "Bashful Cream Bunny", "size": "Large", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Leola Bear", "size": "Large", "price": "1 – 2 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear", "size": "Large", "price": "1 – 2 triệu"}, {"tag": "Dragon", "prod": "Lazulia Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Lavender Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Sky Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Heart Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Malachy Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Snow Dragon", "size": "Large", "price": "2 – 3 triệu"}, {"tag": "Other Animals", "prod": "Vivien Reindeer", "size": "Large", "price": "3 – 4 triệu"}, {"tag": "Other Animals", "prod": "Sofia Reindeer", "size": "Large", "price": "3 – 4 triệu"}, {"tag": "Other Animals", "prod": "Bashful Snow Tiger", "size": "Huge", "price": "3 – 4 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear", "size": "Huge", "price": "2 – 3 triệu"}, {"tag": "Dragon", "prod": "Rose Dragon", "size": "Huge", "price": "Trên 5 triệu"}, {"tag": "Dragon", "prod": "Snow Dragon", "size": "Huge", "price": "Trên 5 triệu"}, {"tag": "Dragon", "prod": "Dexter Huge", "size": "Huge", "price": "Trên 5 triệu"}, {"tag": "Bunnies", "prod": "Blossom Blush Bunny 'Cherry'", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Blossom Beige Bunny 'Petal'", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Bashful Beige Bunny", "size": "Huge", "price": "3 – 4 triệu"}, {"tag": "Bunnies", "prod": "Bashful Cream Bunny", "size": "Huge", "price": "3 – 4 triệu"}, {"tag": "Bunnies", "prod": "Luxe Bunny Azure", "size": "Huge", "price": "Trên 5 triệu"}, {"tag": "Bunnies", "prod": "Luxe Bunny Scarlett Huge", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Luxe Bunny Rosa", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Bashful Luxe Luna", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Springlowe Luxe Bunny", "size": "Huge", "price": "4 – 5 triệu"}, {"tag": "Bunnies", "prod": "Bashful Unicorn", "size": "Huge", "price": "3 – 4 triệu"}, {"tag": "Other Animals", "prod": "Bashful Luxe Elephant Thuddeus", "size": "Huge", "price": "3 – 4 triệu"}, {"tag": "Other Animals", "prod": "Bashful Snow Tiger", "size": "Really Big", "price": "Trên 5 triệu"}, {"tag": "Bear", "prod": "Bartholomew Bear", "size": "Really Big", "price": "4 – 5 triệu"}, {"tag": "Other Animals", "prod": "Bashful Unicorn", "size": "Really Big", "price": "Trên 5 triệu"}, {"tag": "Musical Pull", "prod": "Blossom Bea Beige Bunny Musical Pull", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Bunny Musical Pull Cream", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Bunny Musical Pull Baby Blue", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Bunny Musical Pull Blush", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Amuseables Moon Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Amuseables Sun Musical Pull", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bartholomew Bear Musical Pull", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Blossom Cream Bunny 'Berry' Musical Pull", "size": "", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Giraffe Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Black & Cream Puppy Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Amuseables Stratto Cloud Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Bashful Fox Cub Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Toy", "prod": "Odell Octopus Activity Toy", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Soother", "prod": "Jellycat Bashful Blush Bunny Soother", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Musical Pull", "prod": "Blossom Tulip Bunny Star Musical Pull", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Miffy Flat ECO Corduroy Keychain Buttercream - 4\"", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Miffy Flat ECO Corduroy Keychain - Off White", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Miffy Flat ECO Corduroy Keychain - Dusty Rose", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Miffy ECO Corduroy Keychain - Grey", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Miffy ECO Corduroy Keychain - Pink", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Miffy ECO Corduroy Keychain - Off White", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Heart Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Bartholomew Bear Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables  Bag Charm Peanut", "size": "-", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Aubergine Bag Charm", "size": "-", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Bag Charm Marshmallow", "size": "-", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Cherries Bag Charm", "size": "-", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Bunny Beige Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Peach Bag Charm", "size": "-", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Bag Charm Baguett", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Coffee Bean Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Coffee-to-Go Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Peanut Penguin Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Little Pup Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Storm Cloud Bag Charm", "size": "", "price": "Dưới 1 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Siofra Shamrock Bag Charm", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Bashful Zodihop Bunny Bag Charm", "size": "-", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Fran Pancakes Bag Charm", "size": "", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Sky Dragon Bag Charm", "size": "", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Sun Bag Charm", "size": "", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Amuseables Croissant Bag Charm", "size": "", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Fergus Frog Bag Charm", "size": "", "price": "1 – 2 triệu"}, {"tag": "Bag Charm", "prod": "Test", "size": "", "price": "1 – 2 triệu"}];
+  document.getElementById('loading').style.display='none';
+  render();
+}
+
+loadData();
+</script>
+</body>
+</html>
