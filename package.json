@@ -1,0 +1,14 @@
+{
+  "name": "fluffy-cuddles",
+  "version": "1.0.0",
+  "description": "Jellycat products catalog for The Fluffy Cuddles",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "lint": "echo 'No linter configured'",
+    "test": "echo 'No tests configured'"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
