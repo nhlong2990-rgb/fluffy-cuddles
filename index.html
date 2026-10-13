@@ -84,6 +84,21 @@ header{background:var(--cream);border-bottom:1.5px solid var(--tan);padding:11px
 footer{background:var(--brown);color:var(--tan);text-align:center;padding:20px 16px;font-size:12px;line-height:1.9}
 footer a{color:#F5ECD8;font-weight:800;text-decoration:none}
 </style>
+<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+
+  ttq.load('DB6RLK3C77U8V2LM5PFG');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+<!-- Vercel Web Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -100,7 +115,7 @@ footer a{color:#F5ECD8;font-weight:800;text-decoration:none}
       <div class="logo-sub">soft care service</div>
     </div>
   </div>
-  <a class="fb-btn" href="https://www.facebook.com/thefluffycuddles/" target="_blank">Nhắn tin →</a>
+  <a class="fb-btn" href="https://www.facebook.com/thefluffycuddles/" target="_blank" onclick="trackContact('header_nhan_tin')">Nhắn tin →</a>
 </header>
 
 <section class="hero">
@@ -160,7 +175,7 @@ footer a{color:#F5ECD8;font-weight:800;text-decoration:none}
 
 <footer>
   <strong>The Fluffy Cuddles</strong> · Soft Care Service<br>
-  <a href="https://www.facebook.com/thefluffycuddles/" target="_blank">Facebook / Messenger</a>
+  <a href="https://www.facebook.com/thefluffycuddles/" target="_blank" onclick="trackContact('footer_messenger')">Facebook / Messenger</a>
   &nbsp;·&nbsp; Jellycat chính hãng tại Việt Nam
 </footer>
 
@@ -231,10 +246,10 @@ function render(){
   grid.innerHTML = filtered.map((p,i)=>{
     const em = EMOJI[p.tag]||'🧸';
     const sizeLow = (p.size||'').toLowerCase();
-    const src1 = GITHUB_RAW + encodeURIComponent(sizeLow ? p.prod+' '+sizeLow+'.webp' : p.prod+'.webp');
-    const src2 = GITHUB_RAW + encodeURIComponent(sizeLow ? p.prod+' '+sizeLow+'.jpg' : p.prod+'.jpg');
-    const src3 = GITHUB_RAW + encodeURIComponent(p.prod+'.webp');
-    const src4 = GITHUB_RAW + encodeURIComponent(p.prod+'.jpg');
+    const src1 = GITHUB_RAW + encImg(sizeLow ? p.prod+' '+sizeLow+'.webp' : p.prod+'.webp');
+    const src2 = GITHUB_RAW + encImg(sizeLow ? p.prod+' '+sizeLow+'.jpg' : p.prod+'.jpg');
+    const src3 = GITHUB_RAW + encImg(p.prod+'.webp');
+    const src4 = GITHUB_RAW + encImg(p.prod+'.jpg');
     return `<div class="card">
       <div class="card-img">
         <div class="card-ph" id="ph-${i}">${em}</div>
@@ -253,7 +268,7 @@ function render(){
         <div class="card-cat">${p.tag}</div>
         <div class="card-name">${p.prod}</div>
         <span class="price-tag">${p.price}</span>
-        <button class="ask-btn" onclick="event.stopPropagation();ask('${p.prod.replace(/'/g,"\\'")}')">Hỏi mua →</button>
+        <button class="ask-btn" onclick="event.stopPropagation();ask(${i})">Hỏi mua →</button>
       </div>
     </div>`;
   }).join('');
@@ -267,7 +282,30 @@ function imgLoaded(imgId, phId){
 }
 
 
-function ask(name){
+// Encode file name for URL (also encode ' so names like 'Bloom' don't break)
+function encImg(name){
+  return encodeURIComponent(name).replace(/'/g,'%27');
+}
+
+// TikTok: track "Contact" when a customer clicks to message the shop
+function trackContact(source, p){
+  try{
+    if(!window.ttq) return;
+    const data = {description: source};
+    if(p){
+      data.content_type = 'product';
+      data.contents = [{
+        content_id: p.prod + (p.size ? ' ' + p.size : ''),
+        content_name: p.prod,
+        content_category: p.tag
+      }];
+    }
+    ttq.track('Contact', data);
+  }catch(e){}
+}
+
+function ask(i){
+  trackContact('hoi_mua', filtered[i]);
   window.open(FB,'_blank');
 }
 
