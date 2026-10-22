@@ -143,25 +143,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <span class="filter-lbl">Loại</span>
   <div class="chip-row" id="tag-chips">
     <button class="chip on" data-val="all">Tất cả</button>
-    <button class="chip" data-val="Bunnies">🐰 Bunnies</button>
-    <button class="chip" data-val="Bear">🐻 Bears</button>
-    <button class="chip" data-val="Dragon">🐲 Dragons</button>
-    <button class="chip" data-val="Amuseables">🍩 Amuseables</button>
-    <button class="chip" data-val="Smudge">🐼 Smudge</button>
-    <button class="chip" data-val="Fuddlewuddle">🦁 Fuddlewuddle</button>
-    <button class="chip" data-val="Puppy">🐶 Puppy</button>
-    <button class="chip" data-val="Other Animals">🦆 Others</button>
-    <button class="chip" data-val="Musical Pull">🎵 Musical</button>
-    <button class="chip" data-val="Bag Charm">✨ Charm</button>
   </div>
   <span class="filter-lbl">Size</span>
   <div class="chip-row" id="size-chips">
     <button class="chip on" data-val="all">Tất cả</button>
-    <button class="chip" data-val="Small">Small</button>
-    <button class="chip" data-val="Medium">Medium</button>
-    <button class="chip" data-val="Large">Large</button>
-    <button class="chip" data-val="Huge">Huge</button>
-    <button class="chip" data-val="Really Big">Really Big</button>
   </div>
   <span class="filter-lbl">Giá</span>
   <div class="chip-row" id="price-chips">
@@ -186,47 +171,81 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
 <script>
 const CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSMJSxl6mo7K9MSdVA5OmxVy1HyV4UGP8CVzoOVlGEsCLEzTKimv4EtWspzPyxcf2kcknaQ8eTTtrWQ/pub?gid=1138333654&single=true&output=csv&t=' + Date.now();
-const GITHUB_RAW = 'https://raw.githubusercontent.com/nhlong2990-rgb/fluffy-cuddles/main/';
+// Data + images are served from this same deployment (works for previews too)
+const GITHUB_RAW = '';
 const FB = 'https://www.facebook.com/thefluffycuddles/';
-const EMOJI = {Bunnies:'🐰',Bear:'🐻',Dragon:'🐲','Other Animals':'🦆',Amuseables:'🍩',Smudge:'🐼',Fuddlewuddle:'🦁',Puppy:'🐶','Musical Pull':'🎵','Bag Charm':'✨',Toy:'🎁'};
+const EMOJI = {Bunny:'🐰',Bunnies:'🐰',Bear:'🐻',Dragon:'🐲','Other Animals':'🦆',Amuseables:'🍩',Smudge:'🐼',Fuddlewuddle:'🦁',Puppy:'🐶','Musical Pull':'🎵','Bag Charm':'✨',Toy:'🎁'};
 
-let ALL = [], filtered = [];
+const TAG_ORDER = ['Bunny','Bear','Dragon','Amuseables','Smudge','Puppy','Fuddlewuddle','Other Animals','Musical Pull','Bag Charm'];
+const SIZE_ORDER = ['Tiny','Little','Small','Medium','Large','Huge','Really Big'];
+
+let ALL = [], filtered = [], IMGS = [];
 let fTag='all', fSize='all', fPrice='all', fSearch='';
 
-// Parse CSV — handle quoted fields
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = splitCSVLine(lines[0]);
-  const tagIdx=0,prodIdx=1,sizeIdx=2,priceIdx=4; // Tag,Product,Size,Giábán,Khoảnggiá
-  const seen = new Set();
-  const rows = [];
-  for(let i=1;i<lines.length;i++){
-    const c = splitCSVLine(lines[i]);
-    const tag=(c[tagIdx]||'').trim();
-    const prod=(c[prodIdx]||'').trim();
-    const size=(c[sizeIdx]||'').trim();
-    const price=(c[priceIdx]||'').trim();
-
-    if(!prod||prod==='Product') continue;
-    // Dedup by product+size
-    const key=(prod+'|'+size).toLowerCase();
-    if(seen.has(key)) continue;
-    seen.add(key);
-    rows.push({tag,prod,size,price});
+// Parse CSV (quoted fields, "" escapes, CRLF)
+function csvRows(text){
+  const out=[]; let row=[], cur='', inQ=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQ){
+      if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else inQ=false; }
+      else cur+=ch;
+    } else if(ch==='"') inQ=true;
+    else if(ch===','){ row.push(cur); cur=''; }
+    else if(ch==='\n'||ch==='\r'){
+      if(ch==='\r'&&text[i+1]==='\n') i++;
+      row.push(cur); out.push(row); row=[]; cur='';
+    } else cur+=ch;
   }
+  if(cur!==''||row.length){ row.push(cur); out.push(row); }
+  return out;
+}
+
+// Columns: Tag, Product, Size, Giá bán, Khoảng giá, Ảnh
+function parseCSV(text) {
+  const seen = new Set(), rows = [];
+  csvRows(text.replace(/^﻿/,'')).slice(1).forEach(c=>{
+    const tag=(c[0]||'').trim(), prod=(c[1]||'').trim();
+    let size=(c[2]||'').trim();
+    if(size==='-'||size==='–') size='';
+    const price=(c[4]||'').trim(), img=(c[5]||'').trim();
+    if(!prod) return;
+    const key=(prod+'|'+size).toLowerCase();
+    if(seen.has(key)) return;
+    seen.add(key);
+    rows.push({tag,prod,size,price,img});
+  });
   return rows;
 }
 
-function splitCSVLine(line){
-  const result=[];
-  let cur='',inQ=false;
-  for(let i=0;i<line.length;i++){
-    if(line[i]==='"'){inQ=!inQ;}
-    else if(line[i]===','&&!inQ){result.push(cur);cur='';}
-    else cur+=line[i];
-  }
-  result.push(cur);
-  return result;
+function esc(s){
+  return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+// Image candidates: file named in CSV, else "<Product> <size>" then "<Product>" (no other-size fallback)
+function imgCandidates(p){
+  if(p.img) return [p.img];
+  const s=(p.size||'').toLowerCase(), list=[];
+  if(s) list.push(p.prod+' '+s+'.webp', p.prod+' '+s+'.jpg');
+  list.push(p.prod+'.webp', p.prod+'.jpg');
+  return list;
+}
+function nextImg(el,i){
+  el._t=(el._t||0)+1;
+  const list=IMGS[i]||[];
+  if(el._t<list.length) el.src=list[el._t]; else el.style.display='none';
+}
+
+// Filter chips built from the data
+function buildChips(rowId, values, order, label){
+  const row=document.getElementById(rowId);
+  const uniq=[...new Set(values.filter(Boolean))];
+  uniq.sort((a,b)=>{
+    const ia=order.indexOf(a), ib=order.indexOf(b);
+    return (ia<0?999:ia)-(ib<0?999:ib) || a.localeCompare(b);
+  });
+  row.innerHTML='<button class="chip on" data-val="all">Tất cả</button>'+
+    uniq.map(v=>`<button class="chip" data-val="${esc(v)}">${label(v)}</button>`).join('');
 }
 
 function getFiltered(){
@@ -248,29 +267,19 @@ function render(){
   }
   grid.innerHTML = filtered.map((p,i)=>{
     const em = EMOJI[p.tag]||'🧸';
-    const sizeLow = (p.size||'').toLowerCase();
-    const src1 = GITHUB_RAW + encImg(sizeLow ? p.prod+' '+sizeLow+'.webp' : p.prod+'.webp');
-    const src2 = GITHUB_RAW + encImg(sizeLow ? p.prod+' '+sizeLow+'.jpg' : p.prod+'.jpg');
-    const src3 = GITHUB_RAW + encImg(p.prod+'.webp');
-    const src4 = GITHUB_RAW + encImg(p.prod+'.jpg');
+    IMGS[i] = imgCandidates(p).map(n=>GITHUB_RAW+encImg(n));
     return `<div class="card">
       <div class="card-img">
         <div class="card-ph" id="ph-${i}">${em}</div>
-        <img src="${src1}"
+        <img src="${IMGS[i][0]}" alt="${esc(p.prod)}" loading="lazy"
           onload="this.classList.add('show');this.previousElementSibling.style.display='none'"
-          onerror="
-            var s=this;
-            if(s._t===undefined)s._t=0;
-            var fb=['${src2}','${src3}','${src4}'];
-            if(s._t<fb.length){s.src=fb[s._t++];}
-            else{s.style.display='none';}
-          ">
-        <span class="size-tag">${p.size||'–'}</span>
+          onerror="nextImg(this,${i})">
+        ${p.size?`<span class="size-tag">${esc(p.size)}</span>`:''}
       </div>
       <div class="card-body">
-        <div class="card-cat">${p.tag}</div>
-        <div class="card-name">${p.prod}</div>
-        <span class="price-tag">${p.price}</span>
+        <div class="card-cat">${esc(p.tag)}</div>
+        <div class="card-name">${esc(p.prod)}</div>
+        <span class="price-tag">${esc(p.price)}</span>
         <button class="ask-btn" onclick="event.stopPropagation();ask(${i})">Nhận nuôi →</button>
       </div>
     </div>`;
@@ -333,12 +342,14 @@ document.getElementById('search').addEventListener('input',e=>{
 
 // Load CSV
 async function loadData(){
-  const CSV_URL = 'https://raw.githubusercontent.com/nhlong2990-rgb/fluffy-cuddles/main/products.csv';
+  const CSV_URL = 'products.csv';
   try{
     const res = await fetch(CSV_URL);
     if(!res.ok) throw new Error('HTTP '+res.status);
     const text = await res.text();
     ALL = parseCSV(text);
+    buildChips('tag-chips', ALL.map(p=>p.tag), TAG_ORDER, v=>((EMOJI[v]||'🧸')+' '+esc(v)));
+    buildChips('size-chips', ALL.map(p=>p.size), SIZE_ORDER, v=>esc(v));
   }catch(e){
     console.log('CSV error:', e.message);
     ALL = [];
