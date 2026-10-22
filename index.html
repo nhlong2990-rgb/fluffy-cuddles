@@ -215,6 +215,8 @@ function parseCSV(text) {
     seen.add(key);
     rows.push({tag,prod,size,price,img});
   });
+  // Products with a photo first; otherwise keep the sheet's order (stable sort)
+  rows.sort((a,b)=>(b.img?1:0)-(a.img?1:0));
   return rows;
 }
 
