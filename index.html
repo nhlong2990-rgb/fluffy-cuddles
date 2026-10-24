@@ -273,7 +273,7 @@ function render(){
     return `<div class="card">
       <div class="card-img">
         <div class="card-ph" id="ph-${i}">${em}</div>
-        <img src="${IMGS[i][0]}" alt="${esc(p.prod)}" loading="lazy"
+        <img src="${IMGS[i][0]}" alt="${esc(p.prod)}" loading="lazy" decoding="async"
           onload="this.classList.add('show');this.previousElementSibling.style.display='none'"
           onerror="nextImg(this,${i})">
         ${p.size?`<span class="size-tag">${esc(p.size)}</span>`:''}
